@@ -9,6 +9,9 @@ import {
     FooterComponent,
 } from './components';
 
+import { FirebaseModule } from './firebase.module';
+import { AuthModule } from '../modules/auth/auth.module';
+
 @NgModule({
     declarations: [
         MainLayoutComponent,
@@ -17,6 +20,7 @@ import {
         SidebarComponent,
         FooterComponent,
     ],
-    imports: [CommonModule, RouterModule],
+    imports: [CommonModule, RouterModule, FirebaseModule, AuthModule],
+    providers: [],
 })
 export class CoreModule {}

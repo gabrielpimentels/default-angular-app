@@ -26,6 +26,7 @@
                             src="https://demos.creative-tim.com/notus-js/assets/img/github.svg" />Github
                     </button>
                     <button
+                        (click)="authService.GoogleAuth()"
                         class="bg-white active:bg-blueGray-50 text-blueGray-700 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
                         type="button">
                         <img
@@ -40,24 +41,14 @@
                 <div class="text-blueGray-400 text-center mb-3 font-bold">
                     <small>Or sign up with credentials</small>
                 </div>
-                <form>
+                <form [formGroup]="signUpForm">
                     <div class="relative w-full mb-3">
                         <label
                             class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                            for="grid-name"
-                            >Name</label
-                        ><input
-                            type="text"
-                            class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                            placeholder="Name" />
-                    </div>
-
-                    <div class="relative w-full mb-3">
-                        <label
-                            class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                            for="grid-password"
+                            for="grid-email"
                             >Email</label
                         ><input
+                            formControlName="email"
                             type="email"
                             class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                             placeholder="Email" />
@@ -68,6 +59,7 @@
                             for="grid-password"
                             >Password</label
                         ><input
+                            formControlName="password"
                             type="password"
                             class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                             placeholder="Password" />
@@ -75,13 +67,19 @@
                     <div class="text-center mt-6">
                         <button
                             (click)="signUp()"
-                            class="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
-                            type="button">
+                            class="bg-blueGray-800 text-white text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
+                            type="submit">
                             Sign Up
                         </button>
                     </div>
                 </form>
-                <a [routerLink]="'/auth/sign-in'"> Have already register? </a>
+
+                <span
+                    >Already have an account?
+                    <a class="redirect" [routerLink]="'/auth/sign-in'"
+                        >Sign In</a
+                    ></span
+                >
             </div>
         </div>
     </div>

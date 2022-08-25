@@ -1,10 +1,16 @@
 import { Component } from '@angular/core';
 
+import { AuthService } from 'src/app/modules/auth/services';
+
 @Component({
     selector: 'app-navbar',
     templateUrl: './navbar.component.html',
     styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent {
-    constructor() {}
+    constructor(private authService: AuthService) {}
+
+    signOut() {
+        this.authService.SignOut();
+    }
 }
