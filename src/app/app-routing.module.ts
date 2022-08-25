@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { MainLayoutComponent, AuthLayoutComponent } from './core/layouts';
-import { AuthGuard } from './core/guards';
+import { AuthGuard, NoAuthGuard } from './core/guards';
 
 const routes: Routes = [
     {
@@ -17,6 +17,7 @@ const routes: Routes = [
     {
         path: 'auth',
         component: AuthLayoutComponent,
+        canActivate: [NoAuthGuard],
         loadChildren: () =>
             import('./modules/auth/auth.module').then(m => m.AuthModule),
     },
