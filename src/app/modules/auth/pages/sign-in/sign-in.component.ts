@@ -28,8 +28,6 @@ export class SignInComponent {
     ) {}
 
     signIn() {
-        console.log('fopksdadfkopsakd');
-
         if (this.signInForm.value.email && this.signInForm.value.password)
             this.authService.SignIn(
                 this.signInForm.value.email,

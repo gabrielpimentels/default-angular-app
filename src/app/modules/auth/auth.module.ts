@@ -6,12 +6,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AuthRoutingModule } from './auth-routing.module';
 
-import { SignUpComponent, SignInComponent } from './pages';
+import {
+    SignUpComponent,
+    SignInComponent,
+    ForgotPasswordComponent,
+} from './pages';
 
 import { AuthService } from './services';
 
 @NgModule({
-    declarations: [SignUpComponent, SignInComponent],
+    declarations: [SignUpComponent, SignInComponent, ForgotPasswordComponent],
     imports: [
         CommonModule,
         FormsModule,

@@ -80,15 +80,13 @@ export class AuthService {
     get isLoggedIn(): boolean {
         const user = JSON.parse(localStorage.getItem('user')!);
 
-        console.log(user);
-
         return user !== null;
     }
 
     GoogleAuth() {
         return this.AuthLogin(new auth.GoogleAuthProvider()).then(
             (res: any) => {
-                this.router.navigate(['dashboard']);
+                if (res) this.router.navigate(['dashboard']);
             }
         );
     }
