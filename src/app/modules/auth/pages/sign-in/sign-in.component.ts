@@ -27,6 +27,14 @@ export class SignInComponent {
         private formBuilder: FormBuilder
     ) {}
 
+    googleAuth() {
+        this.authService.GoogleAuth();
+    }
+
+    gitHubAuth() {
+        this.authService.GitHubAuth();
+    }
+
     signIn() {
         if (this.signInForm.value.email && this.signInForm.value.password)
             this.authService.SignIn(

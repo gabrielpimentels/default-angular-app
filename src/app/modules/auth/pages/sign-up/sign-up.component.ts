@@ -27,6 +27,14 @@ export class SignUpComponent {
         private formBuilder: FormBuilder
     ) {}
 
+    googleAuth() {
+        this.authService.GoogleAuth();
+    }
+
+    gitHubAuth() {
+        this.authService.GitHubAuth();
+    }
+
     signUp() {
         if (this.signUpForm.value.email && this.signUpForm.value.password)
             this.authService.SignUp(

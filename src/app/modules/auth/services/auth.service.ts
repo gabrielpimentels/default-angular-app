@@ -1,6 +1,8 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { ToastrService } from 'ngx-toastr';
+
 import * as auth from 'firebase/auth';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import {
@@ -20,7 +22,8 @@ export class AuthService {
         public afs: AngularFirestore,
         public afAuth: AngularFireAuth,
         public router: Router,
-        public ngZone: NgZone
+        public ngZone: NgZone,
+        private toastr: ToastrService
     ) {
         this.afAuth.authState.subscribe(user => {
             if (user) {
@@ -34,27 +37,28 @@ export class AuthService {
         return this.afAuth
             .signInWithEmailAndPassword(email, password)
             .then(result => {
+                this.toastr.success('Welcome back!');
+
                 this.SetUserData(result.user);
                 this.afAuth.authState.subscribe(user => {
-                    if (user) {
-                        this.router.navigate(['dashboard']);
-                    }
+                    if (user) this.router.navigate(['dashboard']);
                 });
             })
             .catch(error => {
-                window.alert(error.message);
+                this.toastr.error(error.message);
             });
     }
 
     SignUp(email: string, password: string) {
         return this.afAuth
             .createUserWithEmailAndPassword(email, password)
-            .then(result => {
+            .then(async result => {
+                await this.SetUserData(result.user);
+
                 this.SendVerificationMail();
-                this.SetUserData(result.user);
             })
             .catch(error => {
-                window.alert(error.message);
+                this.toastr.error(error.message);
             });
     }
 
@@ -70,17 +74,33 @@ export class AuthService {
         return this.afAuth
             .sendPasswordResetEmail(passwordResetEmail)
             .then(() => {
-                window.alert('Password reset email sent, check your inbox.');
+                this.toastr.info(
+                    'Password reset email sent, check your inbox.'
+                );
             })
             .catch(error => {
-                window.alert(error);
+                this.toastr.error(error);
             });
+    }
+
+    get getUser(): User {
+        const user = JSON.parse(localStorage.getItem('user')!);
+
+        return user;
     }
 
     get isLoggedIn(): boolean {
         const user = JSON.parse(localStorage.getItem('user')!);
 
         return user !== null;
+    }
+
+    GitHubAuth() {
+        return this.AuthLogin(new auth.GithubAuthProvider()).then(
+            (res: any) => {
+                if (res) this.router.navigate(['dashboard']);
+            }
+        );
     }
 
     GoogleAuth() {
@@ -94,12 +114,14 @@ export class AuthService {
     AuthLogin(provider: any) {
         return this.afAuth
             .signInWithPopup(provider)
-            .then(result => {
+            .then(async result => {
+                this.toastr.success('Welcome back!');
+
+                await this.SetUserData(result.user);
                 this.router.navigate(['dashboard']);
-                this.SetUserData(result.user);
             })
             .catch(error => {
-                window.alert(error);
+                this.toastr.error(error);
             });
     }
 
@@ -121,6 +143,8 @@ export class AuthService {
 
     SignOut() {
         return this.afAuth.signOut().then(() => {
+            this.toastr.info('See you soon.');
+
             localStorage.removeItem('user');
             this.router.navigate(['sign-in']);
         });
