@@ -4,6 +4,15 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 import { AuthService } from '../../services';
+import { HttpService } from 'src/app/core/services';
+import { map } from 'rxjs';
+
+import { environment } from 'src/environments/environment';
+
+class EndPoints {
+    static BASE = environment.REST_CORE;
+    static PATH = '';
+}
 
 interface SignInForm {
     email: FormControl<string>;
@@ -21,10 +30,16 @@ export class SignInComponent {
         password: new FormControl('gabriel123', { nonNullable: true }),
     });
 
+    static ALL = '/advertise/';
+    static ADD = '/advertise/create';
+    static EDIT = '/advertise/';
+    static UPDATE = '/advertise/update';
+
     constructor(
         private router: Router,
         public authService: AuthService,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private httpService: HttpService
     ) {}
 
     googleAuth() {
@@ -35,11 +50,17 @@ export class SignInComponent {
         this.authService.GitHubAuth();
     }
 
+    get(advertise_id: number) {
+        return this.httpService.get(
+            EndPoints.BASE + SignInComponent.EDIT + advertise_id
+        );
+    }
+
     signIn() {
-        if (this.signInForm.value.email && this.signInForm.value.password)
-            this.authService.SignIn(
-                this.signInForm.value.email,
-                this.signInForm.value.password
-            );
+        this.authService.SignIn('1', '1').subscribe({
+            next: v => console.log(v),
+            error: e => console.error(e),
+            complete: () => console.error('e'),
+        });
     }
 }

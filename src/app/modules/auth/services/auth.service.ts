@@ -11,6 +11,8 @@ import {
 } from '@angular/fire/compat/firestore';
 
 import { User } from '../models/userModel';
+import { HttpService } from 'src/app/core/services/http.service';
+import { map } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
@@ -23,7 +25,8 @@ export class AuthService {
         public afAuth: AngularFireAuth,
         public router: Router,
         public ngZone: NgZone,
-        private toastr: ToastrService
+        private toastr: ToastrService,
+        private httpService: HttpService
     ) {
         this.afAuth.authState.subscribe(user => {
             if (user) {
@@ -31,22 +34,12 @@ export class AuthService {
                 localStorage.setItem('user', JSON.stringify(this.userData));
             } else localStorage.setItem('user', 'null');
         });
+
+        this.httpService.get('/');
     }
 
     SignIn(email: string, password: string) {
-        return this.afAuth
-            .signInWithEmailAndPassword(email, password)
-            .then(result => {
-                this.toastr.success('Welcome back!');
-
-                this.SetUserData(result.user);
-                this.afAuth.authState.subscribe(user => {
-                    if (user) this.router.navigate(['dashboard']);
-                });
-            })
-            .catch(error => {
-                this.toastr.error(error.message);
-            });
+        return this.httpService.post('http://localhost:5000/auth/signin');
     }
 
     SignUp(email: string, password: string) {
